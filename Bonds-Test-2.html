@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Облигации: проверьте себя — тест 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F6; --card:#FFFFFF; --ink:#13223A; --muted:#5B6B82; --line:#CFD8E3;
+  --accent:#1E3A6E; --accent-ink:#FFFFFF;
+  --ok:#17704F; --ok-bg:#E3F4EC; --bad:#A8321F; --bad-bg:#FBE9E5;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1626; --card:#16233A; --ink:#E6ECF5; --muted:#9AA9BF; --line:#2B3A55;
+    --accent:#8FB0F0; --accent-ink:#0E1626;
+    --ok:#6FD3A6; --ok-bg:#12352A; --bad:#FF9C86; --bad-bg:#3A1C17;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1626; --card:#16233A; --ink:#E6ECF5; --muted:#9AA9BF; --line:#2B3A55;
+  --accent:#8FB0F0; --accent-ink:#0E1626;
+  --ok:#6FD3A6; --ok-bg:#12352A; --bad:#FF9C86; --bad-bg:#3A1C17;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.55 Onest,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:680px;margin:0 auto;padding:28px 18px 56px}
+h1{font-size:1.5rem;line-height:1.25;margin:0 0 4px;font-weight:700}
+.sub{color:var(--muted);margin:0 0 22px;font-size:.95rem}
+.bar{display:flex;gap:4px;margin-bottom:8px}
+.seg{flex:1;height:8px;border-radius:2px;background:var(--line)}
+.seg.cur{background:var(--accent)}
+.seg.ok{background:var(--ok)}
+.seg.bad{background:var(--bad)}
+.count{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 20px}
+.q{font-size:1.2rem;line-height:1.4;font-weight:500;margin:0 0 18px}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;color:inherit;text-align:left;background:transparent;border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg)}
+.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.opt.dim{opacity:.6}
+.fb{margin-top:18px;padding:14px 16px;border-radius:8px;border-left:4px solid var(--line);background:var(--bg)}
+.fb.ok{border-left-color:var(--ok)} .fb.bad{border-left-color:var(--bad)}
+.fb strong{display:block;margin-bottom:4px}
+.fb.ok strong{color:var(--ok)} .fb.bad strong{color:var(--bad)}
+.fb p{margin:0;font-size:.97rem}
+.actions{margin-top:20px;display:flex;justify-content:flex-end}
+.btn{font:inherit;font-weight:500;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:11px 22px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.score{font-size:2.6rem;font-weight:700;line-height:1.1;margin:0 0 4px}
+.rev{margin:22px 0 0;padding:0;list-style:none;display:grid;gap:12px}
+.rev li{border-top:1px solid var(--line);padding-top:12px;font-size:.97rem}
+.rev .r{color:var(--ok)} .rev .w{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <h1>Облигации: проверьте себя — тест 2</h1>
+  <p class="sub">Выберите вариант ответа. Верный ответ и пояснение появятся сразу после вашего выбора.</p>
+  <div class="bar" id="bar" aria-hidden="true"></div>
+  <div class="count" id="count"></div>
+  <section class="card" id="quiz" aria-live="polite"></section>
+  <section class="card" id="result" hidden></section>
+</main>
+<script>
+var Q=[
+{q:"Облигации отличаются от акций тем, что?",o:["Могут выплачивать пассивный доход", "Их цена не меняется", "Есть гарантия возврата инвестиций", "Не зависят от ключевой ставки"],a:2,e:"В облигациях есть гарантия возврата номинала в конце срока погашения. В акциях нет срока и никаких гарантий в самом инструменте."},
+{q:"Главное преимущество облигаций перед депозитом?",o:["Есть гарантия возврата инвестиций", "Выплачиваются проценты", "Всегда более высокая доходность", "Можно продать в любой момент без потери процентов"],a:3,e:"Обычно у облигаций более высокая доходность, чем у депозитов, но не всегда. Облигации, в отличие от депозита, можно продать до срока погашения и получить НКД (проценты)."},
+{q:"От чего зависит доходность облигаций?",o:["От процента купона", "От цены облигации и процента купона", "От цены облигации, процента купона и налогов", "От цены облигации, процента купона, комиссии брокера и налогов"],a:3,e:"Доходность облигации зависит от всех перечисленных параметров."},
+{q:"Что такое дюрация?",o:["Срок облигации", "Период с момента покупки до срока погашения", "Период, за который инвестор вернёт свои инвестиции", "Период с момента покупки до оферты"],a:2,e:"Это срок, за который инвестор вернёт свои инвестиции с учётом получения купонов. Чем этот срок меньше, тем лучше."},
+{q:"При пут-оферте инвестор",o:["Имеет право погасить облигацию в определённые даты оферты", "Имеет право погасить облигацию в срок погашения", "Получает номинал облигации вне зависимости от своего желания", "Имеет право погасить облигацию в любой момент"],a:0,e:"Инвестор имеет право предъявить облигацию к погашению по номиналу через брокера до срока погашения. За это может взиматься комиссия. Даты оферт обычно заранее определены."},
+{q:"При колл- (отзывной) оферте инвестор",o:["Имеет право предъявить облигацию к погашению в определённые даты", "Получает номинал облигации вне зависимости от своего желания в заранее определённые даты", "Имеет право погасить облигацию по рыночной цене в срок погашения", "Имеет право погасить облигацию по номиналу в срок погашения"],a:1,e:"При отзывной оферте эмитент может погасить облигацию, обычно в заранее оговорённые даты оферты. Инвестор не может отказаться от погашения. Обычно такие оферты используются в период высоких ставок."},
+{q:"Если ключевая ставка растёт, то",o:["Облигации падают в цене, доходность облигации растёт", "Облигации растут в цене, доходность облигации падает", "Облигации падают в цене, доходность облигации падает", "Облигации растут в цене, доходность облигации растёт"],a:0,e:"При росте ключевой ставки цена облигации обычно падает, а доходность повышается. Инвесторы не покупают облигации с доходностью ниже рыночной, поэтому цена падает, а доходность растёт."},
+{q:"Если ключевая ставка снижается, то",o:["Облигации падают в цене, доходность облигаций растёт", "Облигации растут в цене, доходность облигаций растёт", "Облигации падают в цене, доходность облигаций падает", "Облигации растут в цене, доходность облигаций падает"],a:3,e:"Если ключевая ставка снижается, то инвесторы скупают облигации с доходностью выше рыночной. Цены на такие облигации растут, а их доходность снижается и стремится к ключевой ставке."},
+{q:"Главное отличие надёжных корпоративных облигаций от ВДО для резидентов РФ?",o:["Наличие МСФО", "Прохождение через экспресс-анализ", "Ставка выше ОФЗ на 4–5%", "Государственное участие"],a:3,e:"Самое главное — это госучастие выше 51%. Тогда мы можем приравнивать риск по корпоративной облигации к ОФЗ. Госучастие мы «гуглим»: единого списка госкомпаний нет, и он может меняться."},
+{q:"Что такое выручка компании?",o:["Это денежные средства на счёте", "Это то, что остаётся у компании после расходов", "Это собственные активы компании", "Это средства, поступившие от её клиентов за товары/услуги за период"],a:3,e:"Это зарплата компании. То есть средства, поступившие от клиентов за товары или услуги за период. Выручка не может быть отрицательной: либо она есть, либо её нет."},
+{q:"Назовите главные показатели для оценки платёжеспособности компании?",o:["Чистая маржа, доля капитала и долг/операционный денежный поток", "Выручка и чистая прибыль", "Выручка и капитал", "Выручка, капитал и долг/операционный денежный поток"],a:0,e:"Мы смотрим, сколько компания зарабатывает от выручки (чистая маржа), сколько у неё собственных активов от всех активов (доля капитала) и за сколько лет компания погасит долги (долг/операционный денежный поток)."},
+{q:"За сколько лет компания должна иметь возможность погасить свои долги?",o:["Для РФ 1–2 года, для нерезидентов до 3 лет", "Для РФ до 3 лет, для нерезидентов до 5 лет", "Для РФ до 2 лет, для нерезидентов до 5 лет", "Для РФ 3–5 лет, для нерезидентов до 3 лет"],a:1,e:"Долг/операционный денежный поток должен быть не более 3 лет для РФ и не более 5 лет для нерезидентов. Это говорит о возможности погасить свои долги, включая облигации, без проблем. Это хорошо."},
+{q:"Сколько у компании должно быть собственных активов (за вычетом долгов)?",o:["Капитал должен быть не более 30% от активов", "Капитал должен быть не менее 30% активов", "Капитал должен быть не менее 10% от активов", "Капитал должен быть не менее 3 к активам"],a:1,e:"Активы компании за вычетом обязательств должны составлять не менее 30% от всех активов. Тогда мы говорим о хорошем финансовом положении. Капитал отрицательный, если долги больше активов. Это плохо."},
+{q:"Какая стратегия актуальна, если мы находимся в периоде низких ставок или ожидаем, что ставки могут расти?",o:["Крокодил", "Штанга", "Лесенка", "Пуля"],a:2,e:"Наиболее хорошая стратегия в период низких ставок — короткая лесенка (до 3–5 лет). Если ставки будут расти, мы сможем перекладывать погашающиеся облигации под более высокие проценты."},
+{q:"На какие основные параметры мы ориентируемся при выборе облигаций?",o:["Срок и размер купона в рублях", "Срок и размер купона в процентах от номинала", "Срок и годовая доходность к погашению", "Размер купона в процентах от номинала и годовая доходность к погашению"],a:2,e:"При выборе мы смотрим на срок и доходность к погашению. Размер купона в % от номинала важен для долгих облигаций, поскольку разницу в цене мы получим только в конце срока погашения."},
+{q:"Когда выгодно покупать ПК-облигации?",o:["Когда ставка высокая", "Когда ставка падает", "Когда ставка низкая", "Когда ставка растёт"],a:2,e:"Переменный купон выгоден, когда ставка низкая. Если начнётся кризис или рост инфляции, то ставку начнут повышать, и переменный купон будет подтягиваться вслед за ставкой."},
+{q:"Что мы должны учитывать при инвестировании в еврооблигации?",o:["Курс валюты и доходность", "Ставку купона и доходность", "Срок и ставку купона", "Курс валюты и ставку купона"],a:0,e:"Если мы покупаем еврооблигацию на исторически высоком уровне курса валюты к национальной валюте, то при снижении курса в национальной валюте можно получить убыток даже при хорошей доходности в валюте."},
+{q:"Какие стратегии мы можем выбрать, если у нас есть ограничение по времени в 5 лет?",o:["Пуля и штанга", "Пуля и лесенка", "Лесенка и штанга", "Крокодил"],a:1,e:"При ограничении по времени мы можем выбрать либо лесенку, либо пулю. Лучше всего подходит пуля, если нам нужны будут деньги к конкретному сроку, например на закрытии ИИС."},
+{q:"Когда наиболее актуальна стратегия «крокодил»?",o:["В период низких ставок", "В период высоких ставок", "Когда ожидаем, что ставки будут расти", "В период ставок ниже 10%"],a:1,e:"В период высоких ставок. Тогда у нас есть возможность зафиксировать высокую доходность на более долгий срок, а также выиграть от периода снижения ставок и роста цены облигации."},
+{q:"Какие долгие (более 5 лет) облигации есть смысл выбирать?",o:["С бо́льшим купоном", "С меньшим купоном", "С более коротким сроком", "С более высокой доходностью"],a:0,e:"Лучше всего покупать долгие облигации с бо́льшим купоном, особенно если разница в доходности не слишком большая (до 3%). Разницу между ценой облигации и номиналом мы получим только в конце срока."}
+];
+var i=0,res=[],picked=null;
+var $=function(id){return document.getElementById(id)};
+function el(t,c,x){var n=document.createElement(t);if(c)n.className=c;if(x!==undefined)n.textContent=x;return n}
+
+function bar(){
+  var b=$("bar");b.innerHTML="";
+  Q.forEach(function(_,k){
+    var s=el("div","seg");
+    if(k<res.length) s.className="seg "+(res[k]===Q[k].a?"ok":"bad");
+    else if(k===i) s.className="seg cur";
+    b.appendChild(s);
+  });
+}
+
+function show(){
+  var q=Q[i],box=$("quiz");picked=null;
+  box.innerHTML="";
+  $("count").textContent="Вопрос "+(i+1)+" из "+Q.length;
+  bar();
+  box.appendChild(el("p","q",q.q));
+  var list=el("div","opts");
+  q.o.forEach(function(t,k){
+    var b=el("button","opt",t);b.type="button";
+    b.onclick=function(){answer(k)};
+    list.appendChild(b);
+  });
+  box.appendChild(list);
+  var fb=el("div","fb");fb.hidden=true;fb.id="fb";box.appendChild(fb);
+  var act=el("div","actions");act.hidden=true;act.id="act";
+  var nx=el("button","btn",i===Q.length-1?"Показать результат":"Следующий вопрос");
+  nx.type="button";nx.id="next";nx.onclick=next;
+  act.appendChild(nx);box.appendChild(act);
+}
+
+function answer(k){
+  if(picked!==null)return;
+  picked=k;res[i]=k;
+  var q=Q[i],btns=document.querySelectorAll(".opt");
+  btns.forEach(function(b,n){
+    b.disabled=true;
+    if(n===q.a)b.classList.add("ok");
+    else if(n===k)b.classList.add("bad");
+    else b.classList.add("dim");
+  });
+  var good=k===q.a,fb=$("fb");
+  fb.className="fb "+(good?"ok":"bad");
+  fb.innerHTML="";
+  fb.appendChild(el("strong",null,good?"Верно":"Неверно. Правильный ответ: "+q.o[q.a]));
+  fb.appendChild(el("p",null,q.e));
+  fb.hidden=false;$("act").hidden=false;
+  bar();
+  $("next").focus({preventScroll:true});
+  fb.scrollIntoView({block:"nearest",behavior:"smooth"});
+}
+
+function next(){
+  if(i<Q.length-1){i++;show();window.scrollTo(0,0)}
+  else finish();
+}
+
+function finish(){
+  var ok=res.filter(function(r,k){return r===Q[k].a}).length;
+  $("quiz").hidden=true;$("count").textContent="Тест завершён";bar();
+  var r=$("result");r.hidden=false;r.innerHTML="";
+  r.appendChild(el("p","score",ok+" из "+Q.length));
+  var pct=Math.round(ok/Q.length*100);
+  r.appendChild(el("p","sub",pct+"% верных ответов"+(ok<Q.length?". Ниже — вопросы, в которых были ошибки.":". Ошибок нет.")));
+  var ul=el("ul","rev");
+  Q.forEach(function(q,k){
+    if(res[k]===q.a)return;
+    var li=el("li");
+    li.appendChild(el("div",null,(k+1)+". "+q.q));
+    li.appendChild(el("div","w","Ваш ответ: "+q.o[res[k]]));
+    li.appendChild(el("div","r","Верно: "+q.o[q.a]));
+    ul.appendChild(li);
+  });
+  r.appendChild(ul);
+  var act=el("div","actions");
+  var again=el("button","btn","Пройти заново");again.type="button";
+  again.onclick=function(){i=0;res=[];r.hidden=true;$("quiz").hidden=false;show();window.scrollTo(0,0)};
+  act.appendChild(again);r.appendChild(act);
+  window.scrollTo(0,0);
+}
+show();
+</script>
+</body>
+</html>
