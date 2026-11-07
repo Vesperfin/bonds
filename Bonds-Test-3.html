@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Облигации: проверьте себя — тест 3 (налоги и ИИС)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F6; --card:#FFFFFF; --ink:#13223A; --muted:#5B6B82; --line:#CFD8E3;
+  --accent:#1E3A6E; --accent-ink:#FFFFFF;
+  --ok:#17704F; --ok-bg:#E3F4EC; --bad:#A8321F; --bad-bg:#FBE9E5;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1626; --card:#16233A; --ink:#E6ECF5; --muted:#9AA9BF; --line:#2B3A55;
+    --accent:#8FB0F0; --accent-ink:#0E1626;
+    --ok:#6FD3A6; --ok-bg:#12352A; --bad:#FF9C86; --bad-bg:#3A1C17;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1626; --card:#16233A; --ink:#E6ECF5; --muted:#9AA9BF; --line:#2B3A55;
+  --accent:#8FB0F0; --accent-ink:#0E1626;
+  --ok:#6FD3A6; --ok-bg:#12352A; --bad:#FF9C86; --bad-bg:#3A1C17;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.55 Onest,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:680px;margin:0 auto;padding:28px 18px 56px}
+h1{font-size:1.5rem;line-height:1.25;margin:0 0 4px;font-weight:700}
+.sub{color:var(--muted);margin:0 0 22px;font-size:.95rem}
+.bar{display:flex;gap:4px;margin-bottom:8px}
+.seg{flex:1;height:8px;border-radius:2px;background:var(--line)}
+.seg.cur{background:var(--accent)}
+.seg.ok{background:var(--ok)}
+.seg.bad{background:var(--bad)}
+.count{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 20px}
+.q{font-size:1.2rem;line-height:1.4;font-weight:500;margin:0 0 18px}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;color:inherit;text-align:left;background:transparent;border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg)}
+.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.opt.dim{opacity:.6}
+.fb{margin-top:18px;padding:14px 16px;border-radius:8px;border-left:4px solid var(--line);background:var(--bg)}
+.fb.ok{border-left-color:var(--ok)} .fb.bad{border-left-color:var(--bad)}
+.fb strong{display:block;margin-bottom:4px}
+.fb.ok strong{color:var(--ok)} .fb.bad strong{color:var(--bad)}
+.fb p{margin:0;font-size:.97rem}
+.actions{margin-top:20px;display:flex;justify-content:flex-end}
+.btn{font:inherit;font-weight:500;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:11px 22px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.score{font-size:2.6rem;font-weight:700;line-height:1.1;margin:0 0 4px}
+.rev{margin:22px 0 0;padding:0;list-style:none;display:grid;gap:12px}
+.rev li{border-top:1px solid var(--line);padding-top:12px;font-size:.97rem}
+.rev .r{color:var(--ok)} .rev .w{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <h1>Облигации: проверьте себя — тест 3 (налоги и ИИС)</h1>
+  <p class="sub">Выберите вариант ответа. Верный ответ появится сразу после вашего выбора.</p>
+  <div class="bar" id="bar" aria-hidden="true"></div>
+  <div class="count" id="count"></div>
+  <section class="card" id="quiz" aria-live="polite"></section>
+  <section class="card" id="result" hidden></section>
+</main>
+<script>
+var Q=[
+{q:"Какие ставки налога у налогового резидента РФ по доходу с облигаций?",o:["13% и 15%", "30%", "15% и 30%"],a:0,e:""},
+{q:"В каком случае инвестору нужно отчитываться в ИФНС и платить налог самостоятельно?",o:["При получении дохода от зарубежного брокера", "При получении дохода по купонам", "При получении дохода от покупки/продажи (погашения) облигаций"],a:0,e:""},
+{q:"Какой размер необлагаемого лимита в 2026 году по процентам на депозиты/вклады?",o:["210 000", "Зависит от ключевой ставки в течение 2026 года", "Налог отменён на 2026 год", "150 000", "0"],a:1,e:""},
+{q:"Какой размер необлагаемого лимита в 2026 году по купонам с облигаций?",o:["Зависит от ключевой ставки в течение 2026 года", "210 000", "0", "150 000", "Налог отменён на 2026 год"],a:2,e:""},
+{q:"Можно ли совмещать разные типы ИИС между собой?",o:["До 2024 года было можно, с 2024 года уже нельзя", "Нельзя", "Можно"],a:1,e:""},
+{q:"Какой максимальный срок использования ИИС?",o:["5 лет", "3 года", "Зависит от типа ИИС", "Не ограничен"],a:3,e:""},
+{q:"Можно ли выводить с ИИС нового типа С средства без потери права на льготы?",o:["Можно", "Можно при особых жизненных ситуациях по утверждённому законом списку", "Нельзя"],a:1,e:""},
+{q:"По бумагам с какого типа ИИС можно выводить купоны на банковский или брокерский счёт?",o:["Б", "А", "А, Б, С", "А, Б", "С"],a:3,e:""},
+{q:"При трансформации ИИС возможен ли зачёт срока старого ИИС?",o:["В пределах 3 лет", "Нет", "Да"],a:0,e:""},
+{q:"Нужно ли трансформировать старый ИИС в новый?",o:["Да, это обязанность инвестора", "Нет, это право инвестора"],a:1,e:""}
+];
+var i=0,res=[],picked=null;
+var $=function(id){return document.getElementById(id)};
+function el(t,c,x){var n=document.createElement(t);if(c)n.className=c;if(x!==undefined)n.textContent=x;return n}
+
+function bar(){
+  var b=$("bar");b.innerHTML="";
+  Q.forEach(function(_,k){
+    var s=el("div","seg");
+    if(k<res.length) s.className="seg "+(res[k]===Q[k].a?"ok":"bad");
+    else if(k===i) s.className="seg cur";
+    b.appendChild(s);
+  });
+}
+
+function show(){
+  var q=Q[i],box=$("quiz");picked=null;
+  box.innerHTML="";
+  $("count").textContent="Вопрос "+(i+1)+" из "+Q.length;
+  bar();
+  box.appendChild(el("p","q",q.q));
+  var list=el("div","opts");
+  q.o.forEach(function(t,k){
+    var b=el("button","opt",t);b.type="button";
+    b.onclick=function(){answer(k)};
+    list.appendChild(b);
+  });
+  box.appendChild(list);
+  var fb=el("div","fb");fb.hidden=true;fb.id="fb";box.appendChild(fb);
+  var act=el("div","actions");act.hidden=true;act.id="act";
+  var nx=el("button","btn",i===Q.length-1?"Показать результат":"Следующий вопрос");
+  nx.type="button";nx.id="next";nx.onclick=next;
+  act.appendChild(nx);box.appendChild(act);
+}
+
+function answer(k){
+  if(picked!==null)return;
+  picked=k;res[i]=k;
+  var q=Q[i],btns=document.querySelectorAll(".opt");
+  btns.forEach(function(b,n){
+    b.disabled=true;
+    if(n===q.a)b.classList.add("ok");
+    else if(n===k)b.classList.add("bad");
+    else b.classList.add("dim");
+  });
+  var good=k===q.a,fb=$("fb");
+  fb.className="fb "+(good?"ok":"bad");
+  fb.innerHTML="";
+  fb.appendChild(el("strong",null,good?"Верно":"Неверно. Правильный ответ: "+q.o[q.a]));
+  if(q.e)fb.appendChild(el("p",null,q.e));
+  fb.hidden=false;$("act").hidden=false;
+  bar();
+  $("next").focus({preventScroll:true});
+  fb.scrollIntoView({block:"nearest",behavior:"smooth"});
+}
+
+function next(){
+  if(i<Q.length-1){i++;show();window.scrollTo(0,0)}
+  else finish();
+}
+
+function finish(){
+  var ok=res.filter(function(r,k){return r===Q[k].a}).length;
+  $("quiz").hidden=true;$("count").textContent="Тест завершён";bar();
+  var r=$("result");r.hidden=false;r.innerHTML="";
+  r.appendChild(el("p","score",ok+" из "+Q.length));
+  var pct=Math.round(ok/Q.length*100);
+  r.appendChild(el("p","sub",pct+"% верных ответов"+(ok<Q.length?". Ниже — вопросы, в которых были ошибки.":". Ошибок нет.")));
+  var ul=el("ul","rev");
+  Q.forEach(function(q,k){
+    if(res[k]===q.a)return;
+    var li=el("li");
+    li.appendChild(el("div",null,(k+1)+". "+q.q));
+    li.appendChild(el("div","w","Ваш ответ: "+q.o[res[k]]));
+    li.appendChild(el("div","r","Верно: "+q.o[q.a]));
+    ul.appendChild(li);
+  });
+  r.appendChild(ul);
+  var act=el("div","actions");
+  var again=el("button","btn","Пройти заново");again.type="button";
+  again.onclick=function(){i=0;res=[];r.hidden=true;$("quiz").hidden=false;show();window.scrollTo(0,0)};
+  act.appendChild(again);r.appendChild(act);
+  window.scrollTo(0,0);
+}
+show();
+</script>
+</body>
+</html>
